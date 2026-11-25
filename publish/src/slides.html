@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #9747FF;
+    --purple-dark: #6A2EE8;
+    --ink: #1E1530;
+    --muted: #6B6380;
+    --line: #E6E3EE;
+    --blue: #0D99FF;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; width: 1920px; height: 1080px; overflow: hidden;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px; position: relative;
+    display: grid; grid-template-columns: 760px 1fr; align-items: center;
+    padding: 0 120px; gap: 80px;
+    background: #F5F2FC; color: var(--ink);
+  }
+  .slide.dark {
+    background: radial-gradient(1200px 800px at 85% 30%, #4B23A8 0%, transparent 60%), #160E27;
+    color: #fff;
+  }
+  .eyebrow { font-size: 26px; font-weight: 600; color: var(--purple); letter-spacing: .02em; margin-bottom: 24px; }
+  .dark .eyebrow { color: #C8A6FF; }
+  h1 { font-size: 104px; line-height: 1.02; font-weight: 800; letter-spacing: -0.035em; margin: 0 0 32px; }
+  h2 { font-size: 80px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 32px; }
+  p.lead { font-size: 34px; line-height: 1.4; color: var(--muted); margin: 0; }
+  .dark p.lead { color: #CFC6E6; }
+  .brand { display: flex; align-items: center; gap: 20px; margin-bottom: 48px; }
+  .brand img { width: 72px; height: 72px; border-radius: 18px; }
+  .brand span { font-size: 30px; font-weight: 700; }
+  .visual { display: flex; justify-content: center; align-items: center; height: 100%; position: relative; }
+
+  /* ---- mock plugin panel (mirrors ui.html, scaled up) ---- */
+  .panel {
+    width: 380px; zoom: 2;
+    background: #fff; color: #333; border-radius: 10px; overflow: hidden;
+    font-size: 12px; line-height: 1.4;
+    box-shadow: 0 2px 6px rgba(20,10,40,.08), 0 24px 60px rgba(20,10,40,.22);
+  }
+  .panel .titlebar {
+    height: 36px; display: flex; align-items: center; padding: 0 12px;
+    font-weight: 600; font-size: 11px; border-bottom: 1px solid #e5e5e5;
+  }
+  .panel .controls { padding: 12px; display: grid; gap: 8px; border-bottom: 1px solid #e5e5e5; }
+  .panel .row { display: flex; gap: 8px; align-items: center; }
+  .panel .field {
+    flex: 1; height: 28px; padding: 0 8px; display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid #e5e5e5; border-radius: 4px; color: #333;
+  }
+  .panel .field.ph { color: #999; }
+  .panel .btn { height: 28px; padding: 0 12px; border-radius: 4px; background: var(--blue); color: #fff; font-weight: 500; display: flex; align-items: center; }
+  .panel .btn.sec { background: transparent; color: #333; border: 1px solid #e5e5e5; }
+  .panel .check { display: flex; gap: 6px; align-items: center; }
+  .panel .box { width: 12px; height: 12px; border: 1px solid #999; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; }
+  .panel .box.on { background: var(--blue); border-color: var(--blue); }
+  .panel .box.on::after { content: ''; width: 6px; height: 3px; border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: rotate(-45deg) translate(1px,-1px); }
+  .panel .summary { color: #666; }
+  .panel .item { border-bottom: 1px solid #e5e5e5; }
+  .panel .head { display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
+  .panel .head.hl { background: #E5F4FF; }
+  .panel .toggle { width: 16px; text-align: center; color: #999; }
+  .panel .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  .panel .badge { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #f0f0f0; color: #666; }
+  .panel .badge.library { background: #F1E6FF; color: var(--purple); }
+  .panel .badge.missing { background: #FFE2E0; color: #F24822; }
+  .panel .count { min-width: 24px; text-align: right; color: #666; font-variant-numeric: tabular-nums; }
+  .panel .variant { display: flex; gap: 8px; padding: 4px 12px 4px 36px; color: #666; }
+  .panel .variant .name { font-weight: 400; }
+  .panel .variants { padding-bottom: 4px; }
+
+  /* ---- mock canvas ---- */
+  .canvas {
+    position: absolute; inset: 60px 0 60px -40px; border-radius: 20px;
+    background: #E9E7EE; overflow: hidden;
+    background-image: radial-gradient(#d3d0db 1.5px, transparent 1.5px); background-size: 28px 28px;
+  }
+  .frame { position: absolute; background: #fff; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .frame-label { position: absolute; top: -26px; left: 0; font-size: 16px; color: #777; }
+  .bar { position: absolute; border-radius: 6px; background: #EEEAF6; }
+  .inst { position: absolute; border-radius: 8px; background: var(--ink); color: #fff; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .inst.sel { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .canvas .panel { position: absolute; right: 24px; top: 110px; zoom: 1.2; }
+  .cursor { position: absolute; width: 40px; height: 40px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  const COMPONENTS = [
+    { name: 'Button', kind: 'set', remote: true, count: 48, variants: [
+      ['Size=Medium, Variant=Primary', 22], ['Size=Small, Variant=Secondary', 14], ['Size=Medium, Variant=Ghost', 9], ['Size=Large, Variant=Primary', 3] ] },
+    { name: 'Icon / Chevron', kind: 'component', remote: true, count: 31, variants: [] },
+    { name: 'Input', kind: 'set', remote: true, count: 18, variants: [['State=Default', 12], ['State=Error', 6]] },
+    { name: 'Avatar', kind: 'set', remote: true, count: 12, variants: [['Size=32', 8], ['Size=48', 4]] },
+    { name: 'Card / Product', kind: 'component', remote: false, count: 9, variants: [] },
+    { name: 'Badge', kind: 'set', remote: true, count: 7, variants: [['Tone=Success', 4], ['Tone=Neutral', 3]] },
+    { name: 'Navbar', kind: 'component', remote: true, count: 4, variants: [] },
+    { name: 'Promo banner', kind: 'component', remote: false, count: 2, variants: [] },
+    { name: 'Missing component', kind: 'missing', remote: false, count: 1, variants: [] },
+  ];
+
+  function badge(c) {
+    if (c.kind === 'missing') return '<span class="badge missing">Missing</span>';
+    return c.remote ? '<span class="badge library">Library</span>' : '<span class="badge">Local</span>';
+  }
+
+  function panel({ libraryOnly = false, nested = false, open = null, highlight = null, filter = '', limit = 99 } = {}) {
+    const comps = COMPONENTS.filter((c) => !libraryOnly || c.remote);
+    const inst = comps.reduce((s, c) => s + c.count, 0);
+    const label = libraryOnly ? 'library component' : 'component';
+    const rows = comps.slice(0, limit).map((c) => `
+      <div class="item">
+        <div class="head ${highlight === c.name ? 'hl' : ''}">
+          <span class="toggle">${c.variants.length ? (open === c.name ? '▾' : '▸') : ''}</span>
+          <span class="name">${c.name}</span>${badge(c)}<span class="count">${c.count}</span>
+        </div>
+        ${open === c.name ? `<div class="variants">${c.variants.map(([n, k]) =>
+          `<div class="variant"><span class="name">${n}</span><span class="count">${k}</span></div>`).join('')}</div>` : ''}
+      </div>`).join('');
+    return `
+      <div class="panel">
+        <div class="titlebar">Component Spotter</div>
+        <div class="controls">
+          <div class="row"><div class="field">Checkout flow <span style="color:#999">⌄</span></div><div class="btn">Scan</div></div>
+          <div class="row">
+            <span class="check"><span class="box ${nested ? 'on' : ''}"></span> Include nested instances</span>
+            <span class="check"><span class="box ${libraryOnly ? 'on' : ''}"></span> Library only</span>
+          </div>
+          <div class="row"><div class="field ${filter ? '' : 'ph'}">${filter || 'Filter components…'}</div><div class="btn sec">Copy</div></div>
+          <div class="summary">${comps.length} ${label}s · ${inst} instances on "Checkout flow"</div>
+        </div>
+        ${rows}
+      </div>`;
+  }
+
+  const ICON = 'icon.png';
+
+  const SLIDES = {
+    cover: () => `
+      <div class="slide dark">
+        <div>
+          <div class="brand"><img src="${ICON}"><span>Component Spotter</span></div>
+          <h1>See every component on a page.</h1>
+          <p class="lead">Pick a page, press Scan, and get a counted list of every component and variant in use.</p>
+        </div>
+        <div class="visual">${panel({ open: 'Button', limit: 5 })}</div>
+      </div>`,
+
+    list: () => `
+      <div class="slide">
+        <div>
+          <div class="eyebrow">01 — Audit</div>
+          <h2>Every component, counted.</h2>
+          <p class="lead">One row per component or component set, sorted by usage. Badges show whether it comes from a library, lives in this file, or has gone missing.</p>
+        </div>
+        <div class="visual">${panel()}</div>
+      </div>`,
+
+    variants: () => `
+      <div class="slide">
+        <div>
+          <div class="eyebrow">02 — Variants</div>
+          <h2>Drill into variants.</h2>
+          <p class="lead">Expand any component set to see exactly which variants are used, and how often.</p>
+        </div>
+        <div class="visual">${panel({ open: 'Button', limit: 6 })}</div>
+      </div>`,
+
+    library: () => `
+      <div class="slide">
+        <div>
+          <div class="eyebrow">03 — Design system</div>
+          <h2>Library only, in one switch.</h2>
+          <p class="lead">Hide local and missing components to check how much of a page really uses your design system.</p>
+        </div>
+        <div class="visual">${panel({ libraryOnly: true })}</div>
+      </div>`,
+
+    select: () => {
+      const btn = (x, y, sel, w = 150) => `<div class="inst ${sel ? 'sel' : ''}" style="left:${x}px;top:${y}px;width:${w}px;height:48px">Button</div>`;
+      const frame = (x, label, sels) => `
+        <div class="frame" style="left:${x}px;top:200px;width:220px;height:480px">
+          <div class="frame-label">${label}</div>
+          <div class="bar" style="left:20px;top:24px;width:180px;height:40px"></div>
+          <div class="bar" style="left:20px;top:84px;width:180px;height:150px"></div>
+          <div class="bar" style="left:20px;top:254px;width:130px;height:18px"></div>
+          <div class="bar" style="left:20px;top:284px;width:160px;height:18px"></div>
+          ${btn(20, 340, sels[0], 180)}
+          ${btn(20, 404, sels[1], 180)}
+        </div>`;
+      return `
+      <div class="slide" style="grid-template-columns: 560px 1fr">
+        <div>
+          <div class="eyebrow">04 — Navigate</div>
+          <h2>Click to select on canvas.</h2>
+          <p class="lead">Click a component or variant and every matching instance is selected and zoomed into view.</p>
+        </div>
+        <div class="visual">
+          <div class="canvas">
+            ${frame(60, 'Cart', [true, true])}
+            ${frame(300, 'Payment', [true, true])}
+            ${panel({ highlight: 'Button', limit: 5 })}
+          </div>
+        </div>
+      </div>`;
+    },
+  };
+
+  const which = new URLSearchParams(location.search).get('s') || 'cover';
+  document.getElementById('root').innerHTML = SLIDES[which]();
+</script>
+</body>
+</html>

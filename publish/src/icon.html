@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 128px; height: 128px; overflow: hidden; background: #7B3FF2; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A259FF"/>
+      <stop offset="1" stop-color="#6A2EE8"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" fill="url(#bg)"/>
+  <!-- magnifier -->
+  <circle cx="56" cy="56" r="31" fill="rgba(255,255,255,0.14)" stroke="#fff" stroke-width="9"/>
+  <line x1="79" y1="79" x2="103" y2="103" stroke="#fff" stroke-width="13" stroke-linecap="round"/>
+  <!-- component glyph -->
+  <g fill="#fff">
+    <path d="M56 37 L64 45 L56 53 L48 45 Z"/>
+    <path d="M67 48 L75 56 L67 64 L59 56 Z"/>
+    <path d="M56 59 L64 67 L56 75 L48 67 Z"/>
+    <path d="M45 48 L53 56 L45 64 L37 56 Z"/>
+  </g>
+</svg>
+</body>
+</html>
